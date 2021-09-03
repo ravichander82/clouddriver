@@ -295,7 +295,7 @@ class StandardGceAttributeValidator {
   def validateInstanceType(String instanceType, String location, GoogleNamedAccountCredentials credentials) {
     validateNotEmpty(instanceType, "instanceType")
     if (instanceType?.contains('custom')) {
-      validateCustomInstanceType(instanceType, location, credentials)
+   //   validateCustomInstanceType(instanceType, location, credentials)
     }
   }
 
