@@ -303,24 +303,14 @@ class StandardGceAttributeValidator {
       }
   }
 
-  def customInstanceRegExp = /(.*)-?custom-(\d{1,2})-(\d{3,6})/
-  def customInstanceExtMemoryRegExp = /(.*)-?custom-(\d{1,2})-(\d{3,6})-ext/
+  def customInstanceRegExp = /(.*)-?custom-(\d{1,2})-(\d{3,6})(-ext)?/
 
   def validateCustomInstanceType(String instanceType, String location, GoogleNamedAccountCredentials credentials,boolean extendMemory) {
-    def customTypeMatcher
-    if(!extendMemory) {
-      customTypeMatcher = instanceType =~ customInstanceRegExp
+      def customTypeMatcher = instanceType =~ customInstanceRegExp
       if (!customTypeMatcher.matches()) {
-        errors.rejectValue("instanceType", "${context}.instanceType.invalid", "Custom instance string must match pattern /(.*)-?custom-(\\d{1,2})-(\\d{3,6})/.")
+        errors.rejectValue("instanceType", "${context}.instanceType.invalid", "Custom instance string must match pattern /(.*)-?custom-(\\d{1,2})-(\\d{3,6})(-ext)?/.")
         return false
       }
-    } else {
-      customTypeMatcher = instanceType =~ customInstanceExtMemoryRegExp
-      if (!customTypeMatcher.matches()) {
-        errors.rejectValue("instanceType", "${context}.instanceType.invalid", "Custom instance string must match pattern /(.*)-?custom-(\\d{1,2})-(\\d{3,6})-ext/.")
-        return false
-      }
-    }
 
     def vCpuCount = customTypeMatcher.group(2).toDouble()
     def memory = customTypeMatcher.group(3).toDouble()
