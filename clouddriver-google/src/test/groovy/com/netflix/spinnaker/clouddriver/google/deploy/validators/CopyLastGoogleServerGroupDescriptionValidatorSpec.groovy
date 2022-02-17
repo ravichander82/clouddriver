@@ -47,7 +47,7 @@ class CopyLastGoogleServerGroupDescriptionValidatorSpec extends Specification {
     def credentialsProvider = new DefaultAccountCredentialsProvider(credentialsRepo)
     def credentials = new GoogleNamedAccountCredentials.Builder().name(ACCOUNT_NAME).credentials(new FakeGoogleCredentials()).build()
     credentialsRepo.save(ACCOUNT_NAME, credentials)
-    validator.accountCredentialsProvider = credentialsProvider
+    validator.credentialsRepository = credentialsProvider
   }
 
   void "pass validation with minimal description inputs"() {

@@ -21,7 +21,7 @@ import com.netflix.spinnaker.clouddriver.google.deploy.description.UpsertGoogleA
 import com.netflix.spinnaker.clouddriver.google.deploy.ops.UpsertGoogleAutoscalingPolicyAtomicOperation
 import com.netflix.spinnaker.clouddriver.google.model.GoogleAutoscalingPolicy
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
-import com.netflix.spinnaker.clouddriver.security.AccountCredentialsProvider
+import com.netflix.spinnaker.credentials.CredentialsRepository
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -39,10 +39,10 @@ class UpsertGoogleAutoscalingPolicyAtomicOperationConverterUnitSpec extends Spec
 
   def setupSpec() {
     this.converter = new UpsertGoogleAutoscalingPolicyAtomicOperationConverter(objectMapper: mapper)
-    def accountCredentialsProvider = Mock(AccountCredentialsProvider)
+    def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
-    accountCredentialsProvider.getCredentials(_) >> mockCredentials
-    converter.accountCredentialsProvider = accountCredentialsProvider
+    credentialsRepository.getOne(_) >> mockCredentials
+    converter.credentialsRepository = credentialsRepository
   }
 
   void "upsertGoogleScalingPolicyDescription type returns UpsertGoogleScalingPolicyDescription and UpsertGoogleScalingPolicyAtomicOperation"() {

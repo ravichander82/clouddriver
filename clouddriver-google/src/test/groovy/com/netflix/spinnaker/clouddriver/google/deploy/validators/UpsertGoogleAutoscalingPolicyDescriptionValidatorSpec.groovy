@@ -25,6 +25,7 @@ import com.netflix.spinnaker.clouddriver.google.security.FakeGoogleCredentials
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
 import com.netflix.spinnaker.clouddriver.security.DefaultAccountCredentialsProvider
 import com.netflix.spinnaker.clouddriver.security.MapBackedAccountCredentialsRepository
+import com.netflix.spinnaker.credentials.CredentialsRepository
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -65,7 +66,7 @@ class UpsertGoogleAutoscalingPolicyDescriptionValidatorSpec extends Specificatio
     def credentialsProvider = new DefaultAccountCredentialsProvider(credentialsRepo)
     def credentials = new GoogleNamedAccountCredentials.Builder().name(ACCOUNT_NAME).credentials(new FakeGoogleCredentials()).build()
     credentialsRepo.save(ACCOUNT_NAME, credentials)
-    validator.accountCredentialsProvider = credentialsProvider
+    validator.credentialsRepository = credentialsProvider
   }
 
   void "pass validation with proper description inputs"() {
