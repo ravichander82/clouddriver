@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap
 @Import(GoogleConfiguration)
 @EnableConfigurationProperties
 class GoogleInfrastructureProviderConfig {
-
+  /*
   @Autowired Registry registry
 
   @Bean
@@ -184,5 +184,6 @@ class GoogleInfrastructureProviderConfig {
         googleInfrastructureProvider.agents.addAll(newlyAddedAgents)
       }
     }
-  }
+  }  */
+
 }

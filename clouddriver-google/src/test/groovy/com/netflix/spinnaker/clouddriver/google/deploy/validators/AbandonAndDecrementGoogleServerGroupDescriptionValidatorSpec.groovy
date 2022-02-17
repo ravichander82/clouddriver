@@ -49,7 +49,7 @@ class AbandonAndDecrementGoogleServerGroupDescriptionValidatorSpec extends Speci
           .regionToZonesMap(REGION_TO_ZONES)
           .build()
     credentialsRepo.save(ACCOUNT_NAME, credentials)
-    validator.accountCredentialsProvider = credentialsProvider
+    validator.credentialsRepository = credentialsProvider
   }
 
   void "pass validation with proper description inputs"() {

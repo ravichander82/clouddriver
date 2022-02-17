@@ -21,6 +21,7 @@ import com.netflix.spinnaker.clouddriver.google.deploy.description.BasicGoogleDe
 import com.netflix.spinnaker.clouddriver.google.deploy.ops.CopyLastGoogleServerGroupAtomicOperation
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
 import com.netflix.spinnaker.clouddriver.security.AccountCredentialsProvider
+import com.netflix.spinnaker.credentials.CredentialsRepository
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -43,10 +44,10 @@ class CopyLastGoogleServerGroupAtomicOperationConverterUnitSpec extends Specific
 
   def setupSpec() {
     this.converter = new CopyLastGoogleServerGroupAtomicOperationConverter(objectMapper: mapper)
-    def accountCredentialsProvider = Mock(AccountCredentialsProvider)
+    def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
-    accountCredentialsProvider.getCredentials(_) >> mockCredentials
-    converter.accountCredentialsProvider = accountCredentialsProvider
+    credentialsRepository.getOne(_) >> mockCredentials
+    converter.credentialsRepository = credentialsRepository
   }
 
   void "copyLastGoogleServerGroupDescription type returns BasicGoogleDeployDescription and CopyLastGoogleServerGroupAtomicOperation"() {

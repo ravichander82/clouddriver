@@ -21,6 +21,7 @@ import com.netflix.spinnaker.clouddriver.google.deploy.description.DeleteGoogleL
 import com.netflix.spinnaker.clouddriver.google.deploy.ops.loadbalancer.DeleteGoogleLoadBalancerAtomicOperation
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
 import com.netflix.spinnaker.clouddriver.security.AccountCredentialsProvider
+import com.netflix.spinnaker.credentials.CredentialsRepository
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -38,10 +39,10 @@ class DeleteGoogleLoadBalancerAtomicOperationConverterUnitSpec extends Specifica
 
   def setupSpec() {
     this.converter = new DeleteGoogleLoadBalancerAtomicOperationConverter(objectMapper: mapper)
-    def accountCredentialsProvider = Mock(AccountCredentialsProvider)
+    def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
-    accountCredentialsProvider.getCredentials(_) >> mockCredentials
-    converter.accountCredentialsProvider = accountCredentialsProvider
+    credentialsRepository.getOne(_) >> mockCredentials
+    converter.credentialsRepository = credentialsRepository
   }
 
   void "deleteGoogleLoadBalancerDescription type returns DeleteGoogleLoadBalancerDescription and DeleteGoogleLoadBalancerAtomicOperation"() {

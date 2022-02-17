@@ -21,6 +21,8 @@ import com.netflix.spinnaker.clouddriver.google.GoogleExecutorTraits
 import com.netflix.spinnaker.clouddriver.google.security.GoogleCredentials
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
 import com.netflix.spinnaker.clouddriver.security.AccountCredentialsProvider
+import com.netflix.spinnaker.credentials.CredentialsRepository
+import com.netflix.spinnaker.credentials.CredentialsTypeBaseConfiguration
 import groovy.transform.InheritConstructors
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -43,7 +45,7 @@ class GoogleHealthIndicator implements HealthIndicator, GoogleExecutorTraits {
   Registry registry
 
   @Autowired
-  AccountCredentialsProvider accountCredentialsProvider
+  CredentialsTypeBaseConfiguration<GoogleNamedAccountCredentials, ?> credentialsTypeBaseConfiguration
 
   private final AtomicReference<Exception> lastException = new AtomicReference<>(null)
 
@@ -61,7 +63,7 @@ class GoogleHealthIndicator implements HealthIndicator, GoogleExecutorTraits {
   @Scheduled(fixedDelay = 300000L)
   void checkHealth() {
     try {
-      Set<GoogleNamedAccountCredentials> googleCredentialsSet = accountCredentialsProvider.all.findAll {
+      Set<GoogleNamedAccountCredentials> googleCredentialsSet = credentialsTypeBaseConfiguration.credentialsRepository.all.findAll {
         it instanceof GoogleNamedAccountCredentials
       } as Set<GoogleNamedAccountCredentials>
 

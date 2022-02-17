@@ -53,7 +53,7 @@ class UpsertGoogleLoadBalancerDescriptionValidatorSpec extends Specification {
     def credentialsProvider = new DefaultAccountCredentialsProvider(credentialsRepo)
     def credentials = new GoogleNamedAccountCredentials.Builder().name(ACCOUNT_NAME).credentials(new FakeGoogleCredentials()).build()
     credentialsRepo.save(ACCOUNT_NAME, credentials)
-    validator.accountCredentialsProvider = credentialsProvider
+    validator.credentialsRepository = credentialsProvider
     converter = new UpsertGoogleLoadBalancerAtomicOperationConverter(
       accountCredentialsProvider: credentialsProvider,
       objectMapper: new ObjectMapper()

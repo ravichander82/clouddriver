@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Configuration
 @Slf4j
 @Configuration
 class GoogleCredentialsInitializer {
-
+/*
   @Autowired
   GoogleExecutor _googleExecutor  // Not used, just here to force initialization ordering
 
@@ -53,7 +53,7 @@ class GoogleCredentialsInitializer {
     AccountCredentialsRepository accountCredentialsRepository,
     DeployDefaults googleDeployDefaults,
     ConfigFileService configFileService) {
-    
+
     synchronizeGoogleAccounts(clouddriverUserAgentApplicationName, googleConfigurationProperties,
       null, accountCredentialsRepository, googleDeployDefaults, configFileService)
   }
@@ -113,4 +113,6 @@ class GoogleCredentialsInitializer {
       it instanceof GoogleNamedAccountCredentials
     } as List<GoogleNamedAccountCredentials>
   }
+
+ */
 }

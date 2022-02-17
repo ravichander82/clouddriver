@@ -25,7 +25,7 @@ import com.google.api.services.compute.model.Operation
 import com.netflix.spectator.api.DefaultRegistry
 import com.netflix.spinnaker.clouddriver.data.task.Task
 import com.netflix.spinnaker.clouddriver.data.task.TaskRepository
-import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
+
 import com.netflix.spinnaker.clouddriver.google.deploy.GoogleOperationPoller
 import com.netflix.spinnaker.clouddriver.google.deploy.SafeRetry
 import com.netflix.spinnaker.clouddriver.google.deploy.converters.UpsertGoogleLoadBalancerAtomicOperationConverter
@@ -136,7 +136,7 @@ class UpsertGoogleTcpLoadBalancerAtomicOperationUnitSpec extends Specification {
     @Subject def operation = new UpsertGoogleTcpLoadBalancerAtomicOperation(description)
     operation.googleOperationPoller =
       new GoogleOperationPoller(
-        googleConfigurationProperties: new GoogleConfigurationProperties(),
+        googleConfigurationProperties: new GoogleConfigurationProperties2(),
         threadSleeper: threadSleeperMock,
         registry: registry,
         safeRetry: safeRetry
@@ -249,7 +249,7 @@ class UpsertGoogleTcpLoadBalancerAtomicOperationUnitSpec extends Specification {
     @Subject def operation = new UpsertGoogleTcpLoadBalancerAtomicOperation(description)
     operation.googleOperationPoller =
       new GoogleOperationPoller(
-        googleConfigurationProperties: new GoogleConfigurationProperties(),
+        googleConfigurationProperties: new GoogleConfigurationProperties2(),
         threadSleeper: threadSleeperMock,
         registry: registry,
         safeRetry: safeRetry
@@ -362,7 +362,7 @@ class UpsertGoogleTcpLoadBalancerAtomicOperationUnitSpec extends Specification {
     @Subject def operation = new UpsertGoogleTcpLoadBalancerAtomicOperation(description)
     operation.googleOperationPoller =
       new GoogleOperationPoller(
-        googleConfigurationProperties: new GoogleConfigurationProperties(),
+        googleConfigurationProperties: new GoogleConfigurationProperties2(),
         threadSleeper: threadSleeperMock,
         registry: registry,
         safeRetry: safeRetry
