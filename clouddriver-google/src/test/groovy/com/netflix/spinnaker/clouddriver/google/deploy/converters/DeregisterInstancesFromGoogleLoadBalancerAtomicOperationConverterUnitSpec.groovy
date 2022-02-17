@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.netflix.spinnaker.clouddriver.google.deploy.description.DeregisterInstancesFromGoogleLoadBalancerDescription
 import com.netflix.spinnaker.clouddriver.google.deploy.ops.DeregisterInstancesFromGoogleLoadBalancerAtomicOperation
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
-import com.netflix.spinnaker.clouddriver.security.AccountCredentialsProvider
+import com.netflix.spinnaker.credentials.CredentialsRepository
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -38,10 +38,10 @@ class DeregisterInstancesFromGoogleLoadBalancerAtomicOperationConverterUnitSpec 
 
   def setupSpec() {
     this.converter = new DeregisterInstancesFromGoogleLoadBalancerAtomicOperationConverter(objectMapper: mapper)
-    def accountCredentialsProvider = Mock(AccountCredentialsProvider)
+    def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
-    accountCredentialsProvider.getCredentials(_) >> mockCredentials
-    converter.accountCredentialsProvider = accountCredentialsProvider
+    credentialsRepository.getOne(_) >> mockCredentials
+    converter.credentialsRepository = credentialsRepository
   }
 
   void "deregisterInstancesFromGoogleLoadBalancerDescription type returns correct description and operation types"() {

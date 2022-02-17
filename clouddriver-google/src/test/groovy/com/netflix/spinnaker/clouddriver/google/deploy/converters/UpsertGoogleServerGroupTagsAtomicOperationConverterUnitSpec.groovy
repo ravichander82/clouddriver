@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.netflix.spinnaker.clouddriver.google.deploy.description.UpsertGoogleServerGroupTagsDescription
 import com.netflix.spinnaker.clouddriver.google.deploy.ops.UpsertGoogleServerGroupTagsAtomicOperation
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
-import com.netflix.spinnaker.clouddriver.security.AccountCredentialsProvider
+import com.netflix.spinnaker.credentials.CredentialsRepository
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -38,10 +38,10 @@ class UpsertGoogleServerGroupTagsAtomicOperationConverterUnitSpec extends Specif
 
   def setupSpec() {
     this.converter = new UpsertGoogleServerGroupTagsAtomicOperationConverter(objectMapper: mapper)
-    def accountCredentialsProvider = Mock(AccountCredentialsProvider)
+    def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
-    accountCredentialsProvider.getCredentials(_) >> mockCredentials
-    converter.accountCredentialsProvider = accountCredentialsProvider
+    credentialsRepository.getOne(_) >> mockCredentials
+    converter.credentialsRepository = credentialsRepository
   }
 
   void "upsertGoogleServerGroupTagsDescription type returns UpsertGoogleServerGroupTagsDescription and UpsertGoogleServerGroupTagsAtomicOperation"() {
