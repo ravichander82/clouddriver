@@ -65,6 +65,7 @@ public class GoogleCredentialsConfiguration {
                         .computeVersion(
                             a.isAlphaListed() ? ComputeVersion.ALPHA : ComputeVersion.DEFAULT)
                         .imageProjects(a.getImageProjects())
+                        .instanceTypeDisks(googleDeployDefaults.getInstanceTypeDisks())
                         .liveLookupsEnabled(false)
                         .build();
                   } catch (Exception e) {
