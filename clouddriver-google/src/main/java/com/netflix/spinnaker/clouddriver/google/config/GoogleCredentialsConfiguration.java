@@ -19,6 +19,7 @@ package com.netflix.spinnaker.clouddriver.google.config;
 import com.netflix.spinnaker.clouddriver.google.ComputeVersion;
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials;
 import com.netflix.spinnaker.clouddriver.security.CredentialsInitializerSynchronizable;
+import com.netflix.spinnaker.config.GoogleConfiguration;
 import com.netflix.spinnaker.credentials.CredentialsTypeBaseConfiguration;
 import com.netflix.spinnaker.credentials.CredentialsTypeProperties;
 import com.netflix.spinnaker.credentials.definition.AbstractCredentialsLoader;
@@ -41,6 +42,7 @@ public class GoogleCredentialsConfiguration {
           ApplicationContext applicationContext,
           GoogleConfigurationProperties configurationProperties,
           ConfigFileService configFileService,
+          GoogleConfiguration.DeployDefaults googleDeployDefaults,
           String clouddriverUserAgentApplicationName) {
     return new CredentialsTypeBaseConfiguration(
         applicationContext,
