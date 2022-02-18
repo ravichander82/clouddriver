@@ -16,7 +16,7 @@
 
 package com.netflix.spinnaker.config
 
-import com.netflix.spinnaker.cats.agent.Agent
+
 import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
 import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsConfiguration
 import com.netflix.spinnaker.clouddriver.google.deploy.GoogleOperationPoller
@@ -24,14 +24,7 @@ import com.netflix.spinnaker.clouddriver.google.health.GoogleHealthIndicator
 import com.netflix.spinnaker.clouddriver.google.model.GoogleDisk
 import com.netflix.spinnaker.clouddriver.google.model.GoogleInstanceTypeDisk
 import com.netflix.spinnaker.clouddriver.google.provider.GoogleInfrastructureProvider
-import com.netflix.spinnaker.clouddriver.google.security.GoogleCredentialsInitializer
-import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
-import com.netflix.spinnaker.clouddriver.security.CredentialsInitializerSynchronizable
-import com.netflix.spinnaker.credentials.definition.AbstractCredentialsLoader
-import com.netflix.spinnaker.credentials.definition.CredentialsDefinitionSource
-import com.netflix.spinnaker.credentials.poller.Poller
 import groovy.transform.ToString
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
