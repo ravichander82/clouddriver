@@ -16,7 +16,7 @@
 
 package com.netflix.spinnaker.config
 
-
+import com.netflix.spinnaker.clouddriver.google.GoogleExecutor
 import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
 import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsConfiguration
 import com.netflix.spinnaker.clouddriver.google.deploy.GoogleOperationPoller
@@ -60,6 +60,11 @@ class GoogleConfiguration {
   @Bean
   GoogleInfrastructureProvider googleInfrastructureProvider(){
     new GoogleInfrastructureProvider()
+  }
+
+  @Bean
+  GoogleExecutor googleExecutor(){
+    new GoogleExecutor();
   }
 
   @Bean
