@@ -62,19 +62,9 @@ class GoogleHealthIndicator implements HealthIndicator, GoogleExecutorTraits {
 
   @Scheduled(fixedDelay = 300000L)
   void checkHealth() {
-      /*   Set<GoogleNamedAccountCredentials> googleCredentialsSet = credentialsTypeBaseConfiguration.credentialsRepository.all.findAll {
-        it instanceof GoogleNamedAccountCredentials
-      } as Set<GoogleNamedAccountCredentials>
-
-      for (GoogleNamedAccountCredentials accountCredentials in googleCredentialsSet) {   */
       try {
         credentialsTypeBaseConfiguration.credentialsRepository?.all?.forEach({
           try {
-            /*
-              Location is the only App Engine resource guaranteed to exist.
-              The API only accepts '-' here, rather than project name. To paraphrase the provided error,
-              the list of locations is static and not a property of an individual project.
-            */
             timeExecute(it.compute.projects().get(it.project),
               "compute.projects.get",
               TAG_SCOPE, SCOPE_GLOBAL)
