@@ -21,8 +21,7 @@ import com.netflix.spectator.api.Registry;
 import com.netflix.spinnaker.clouddriver.google.provider.GoogleInfrastructureProvider;
 import com.netflix.spinnaker.clouddriver.google.provider.agent.*;
 import com.netflix.spinnaker.credentials.CredentialsLifecycleHandler;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +33,7 @@ public class GoogleCredentialsLifecycleHandler
   private final GoogleInfrastructureProvider googleInfrastructureProvider;
   private final ObjectMapper objectMapper;
   private final Registry registry;
+  private final String clouddriverUserAgentApplicationName;
 
   @Override
   public void credentialsAdded(GoogleNamedAccountCredentials credentials) {
@@ -54,58 +54,186 @@ public class GoogleCredentialsLifecycleHandler
   }
 
   private void addAgentFor(GoogleNamedAccountCredentials credentials) {
-    googleInfrastructureProvider.addAgents(
-        List.of(
-            new GoogleBackendServiceCachingAgent(
-                credentials.getApplicationName(), credentials, objectMapper, registry),
-            new GoogleGlobalAddressCachingAgent(
-                credentials.getApplicationName(), credentials, objectMapper, registry),
-            new GoogleHealthCheckCachingAgent(
-                credentials.getApplicationName(), credentials, objectMapper, registry),
-            new GoogleHttpHealthCheckCachingAgent(
-                credentials.getApplicationName(), credentials, objectMapper, registry),
-            /*  new GoogleHttpLoadBalancerCachingAgent(
-            credentials.getApplicationName(), credentials, objectMapper, registry), */
-            /*     new GoogleImageCachingAgent(
-            credentials.getApplicationName(),
-            credentials,
-            objectMapper,
-            registry,
-            credentials.getImageProjects(),
-            credentials.getImageProjects()), */
-            new GoogleInstanceCachingAgent(),
-            /*    new GoogleInternalLoadBalancerCachingAgent(
-            credentials.getApplicationName(),
-            credentials,
-            objectMapper,
-            registry,
-            credentials.getRegions().toString()),  */
-            new GoogleNetworkCachingAgent(),
-            /*   new GoogleNetworkLoadBalancerCachingAgent(
-            credentials.getApplicationName(),
-            credentials,
-            objectMapper,
-            registry,
-            credentials.getRegions().toString()),  */
-            /*       new GoogleRegionalAddressCachingAgent(
-            credentials.getApplicationName(),
-            credentials,
-            objectMapper,
-            registry,
-            credentials.getRegions().toString()),  */
-            new GoogleSecurityGroupCachingAgent(
-                credentials.getApplicationName(), credentials, objectMapper, registry),
-            new GoogleSslCertificateCachingAgent(
-                credentials.getApplicationName(), credentials, objectMapper, registry)));
-    /*      new GoogleSslLoadBalancerCachingAgent(
-    credentials.getApplicationName(), credentials, objectMapper, registry), */
-    /*         new GoogleSubnetCachingAgent(
-    credentials.getApplicationName(),
+
+    //   List<String> regions = (List<String>)
+    // credentials.getRegions().stream().findAny().get().keySet().stream().collect(Collectors.toList());
+    // filter(x -> x.keySet().stream().collect(Collectors.toList())).collect(Collectors.toList());
+    // */
+    List<AbstractGoogleCachingAgent> googleCachingAgents = new LinkedList<>();
+    googleCachingAgents.add(
+        new GoogleSecurityGroupCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
+    /*   googleCachingAgents.add(new GoogleNetworkCachingAgent(clouddriverUserAgentApplicationName,
+    credentials,
+    objectMapper,
+    registry));  */
+    googleCachingAgents.add(
+        new GoogleGlobalAddressCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
+    googleCachingAgents.add(
+        new GoogleHealthCheckCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
+    /*    googleCachingAgents.add(new GoogleSslLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+    credentials,
+    objectMapper,
+    registry));  */
+    googleCachingAgents.add(
+        new GoogleSslCertificateCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
+    /*   googleCachingAgents.add(new GoogleTcpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+    credentials,
+    objectMapper,
+    registry));  */
+    googleCachingAgents.add(
+        new GoogleBackendServiceCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
+    /*   googleCachingAgents.add(new GoogleInstanceCachingAgent(clouddriverUserAgentApplicationName,
+    credentials,
+    objectMapper,
+    registry));  */
+    /*   googleCachingAgents.add(new GoogleImageCachingAgent(clouddriverUserAgentApplicationName,
     credentials,
     objectMapper,
     registry,
-    credentials.getRegions().toString())));  */
-    /*      new GoogleTcpLoadBalancerCachingAgent(
-    credentials.getApplicationName(), credentials, objectMapper, registry))); */
+    credentials.getImageProjects(),
+    googleConfigurationProperties.getBaseImageProjects()));  */
+    /*  googleCachingAgents.add(new GoogleHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+    credentials,
+    objectMapper,
+    registry)); */
+
+    /*   for (String region : regions){
+        googleCachingAgents.add(new GoogleSubnetCachingAgent(clouddriverUserAgentApplicationName,
+          credentials,
+          objectMapper,
+          registry,
+          region));
+        googleCachingAgents.add(new GoogleRegionalAddressCachingAgent(clouddriverUserAgentApplicationName,
+          credentials,
+          objectMapper,
+          registry,
+          region));
+    /*    googleCachingAgents.add(new GoogleInternalLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+          credentials,
+          objectMapper,
+          registry,
+          region));  */
+    /*    googleCachingAgents.add(new GoogleInternalHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+          credentials,
+          objectMapper,
+          registry,
+          region));
+    /*    googleCachingAgents.add(new GoogleNetworkLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+          credentials,
+          objectMapper,
+          registry,
+          region));  */
+    /*    googleCachingAgents.add(new GoogleRegionalServerGroupCachingAgent(credentials,
+      googleComputeApiFactory,
+      registry,
+      region,
+      objectMapper));
+    googleCachingAgents.add(new GoogleZonalServerGroupCachingAgent(credentials,
+      googleComputeApiFactory,
+      registry,
+      region,
+      objectMapper));   */
+    // }
+
+    googleInfrastructureProvider.addAgents(googleCachingAgents);
   }
+
+  /*
+  newlyAddedAgents << new GoogleSecurityGroupCachingAgent(clouddriverUserAgentApplicationName,
+                                                                credentials,
+                                                                objectMapper,
+                                                                registry)
+        newlyAddedAgents << new GoogleNetworkCachingAgent(clouddriverUserAgentApplicationName,
+                                                          credentials,
+                                                          objectMapper,
+                                                          registry)
+
+        newlyAddedAgents << new GoogleGlobalAddressCachingAgent(clouddriverUserAgentApplicationName,
+                                                                credentials,
+                                                                objectMapper,
+                                                                registry)
+
+        regions.each { String region ->
+          newlyAddedAgents << new GoogleSubnetCachingAgent(clouddriverUserAgentApplicationName,
+                                                           credentials,
+                                                           objectMapper,
+                                                           registry,
+                                                           region)
+          newlyAddedAgents << new GoogleRegionalAddressCachingAgent(clouddriverUserAgentApplicationName,
+                                                                    credentials,
+                                                                    objectMapper,
+                                                                    registry,
+                                                                    region)
+        }
+
+        newlyAddedAgents << new GoogleHealthCheckCachingAgent(clouddriverUserAgentApplicationName,
+                                                              credentials,
+                                                              objectMapper,
+                                                              registry)
+        newlyAddedAgents << new GoogleHttpHealthCheckCachingAgent(clouddriverUserAgentApplicationName,
+                                                                  credentials,
+                                                                  objectMapper,
+                                                                  registry)
+        newlyAddedAgents << new GoogleSslLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+                                                                  credentials,
+                                                                  objectMapper,
+                                                                  registry)
+        newlyAddedAgents << new GoogleSslCertificateCachingAgent(clouddriverUserAgentApplicationName,
+                                                                 credentials,
+                                                                 objectMapper,
+                                                                 registry)
+        newlyAddedAgents << new GoogleTcpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+                                                                  credentials,
+                                                                  objectMapper,
+                                                                  registry)
+        newlyAddedAgents << new GoogleBackendServiceCachingAgent(clouddriverUserAgentApplicationName,
+                                                                 credentials,
+                                                                 objectMapper,
+                                                                 registry)
+        newlyAddedAgents << new GoogleInstanceCachingAgent(clouddriverUserAgentApplicationName,
+                                                           credentials,
+                                                           objectMapper,
+                                                           registry)
+        newlyAddedAgents << new GoogleImageCachingAgent(clouddriverUserAgentApplicationName,
+                                                        credentials,
+                                                        objectMapper,
+                                                        registry,
+                                                        credentials.imageProjects,
+                                                        googleConfigurationProperties.baseImageProjects)
+        newlyAddedAgents << new GoogleHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+                                                                   credentials,
+                                                                   objectMapper,
+                                                                   registry)
+        regions.each { String region ->
+          newlyAddedAgents << new GoogleInternalLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+                                                                         credentials,
+                                                                         objectMapper,
+                                                                         registry,
+                                                                         region)
+          newlyAddedAgents << new GoogleInternalHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+                                                                         credentials,
+                                                                         objectMapper,
+                                                                         registry,
+                                                                         region)
+          newlyAddedAgents << new GoogleNetworkLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+                                                                        credentials,
+                                                                        objectMapper,
+                                                                        registry,
+                                                                        region)
+          newlyAddedAgents << new GoogleRegionalServerGroupCachingAgent(credentials,
+                                                                        computeApiFactory,
+                                                                        registry,
+                                                                        region,
+                                                                        objectMapper)
+          newlyAddedAgents << new GoogleZonalServerGroupCachingAgent(credentials,
+                                                                     computeApiFactory,
+                                                                     registry,
+                                                                     region,
+                                                                     objectMapper)
+   */
 }

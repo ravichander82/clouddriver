@@ -16,7 +16,9 @@
 
 package com.netflix.spinnaker.config
 
+import com.netflix.spinnaker.clouddriver.google.GoogleCloudProvider
 import com.netflix.spinnaker.clouddriver.google.GoogleExecutor
+import com.netflix.spinnaker.clouddriver.google.compute.GoogleComputeApiFactory
 import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
 import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsConfiguration
 import com.netflix.spinnaker.clouddriver.google.deploy.GoogleOperationPoller
@@ -24,12 +26,21 @@ import com.netflix.spinnaker.clouddriver.google.health.GoogleHealthIndicator
 import com.netflix.spinnaker.clouddriver.google.model.GoogleDisk
 import com.netflix.spinnaker.clouddriver.google.model.GoogleInstanceTypeDisk
 import com.netflix.spinnaker.clouddriver.google.provider.GoogleInfrastructureProvider
+import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
+import com.netflix.spinnaker.credentials.CredentialsLifecycleHandler
+import com.netflix.spinnaker.credentials.CredentialsRepository
+import com.netflix.spinnaker.credentials.MapBackedCredentialsRepository
+import com.netflix.spinnaker.credentials.definition.AbstractCredentialsLoader
+import com.netflix.spinnaker.credentials.definition.BasicCredentialsLoader
 import groovy.transform.ToString
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.*
 import org.springframework.scheduling.annotation.EnableScheduling
+
+import javax.annotation.Nullable
 
 @Configuration
 @EnableConfigurationProperties
@@ -64,8 +75,38 @@ class GoogleConfiguration {
 
   @Bean
   GoogleExecutor googleExecutor(){
-    new GoogleExecutor();
+    new GoogleExecutor()
   }
+
+  @Bean
+  @ConditionalOnMissingBean(
+    value = GoogleNamedAccountCredentials.class,
+    parameterizedContainer = CredentialsRepository.class)
+  public CredentialsRepository<GoogleNamedAccountCredentials> googleCredentialsRepository(
+    CredentialsLifecycleHandler<GoogleNamedAccountCredentials> eventHandler) {
+    return new MapBackedCredentialsRepository<>(GoogleCloudProvider.ID, eventHandler);
+  }
+/*
+  @Bean
+  @ConditionalOnMissingBean(
+    value = GoogleNamedAccountCredentials.class,
+    parameterizedContainer = AbstractCredentialsLoader.class)
+  public AbstractCredentialsLoader<GoogleNamedAccountCredentials> googleCredentialsLoader(
+    @Nullable
+      CredentialsDefinitionSource<GoogleConfigurationProperties.ManagedAccount>
+  googleCredentialSource,
+  GoogleConfigurationProperties configurationProperties,
+                                    googleCredentials.Factory credentialFactory,
+                                                                  CredentialsRepository<GoogleNamedAccountCredentials> kubernetesCredentialsRepository) {
+
+    if (googleCredentialSource == null) {
+     googleCredentialSource = configurationProperties::getAccounts;
+    }
+    return new BasicCredentialsLoader<>(
+      googleCredentialSource,
+      a -> new GoogleNamedAccountCredentials(a, credentialFactory),
+      googleCredentialsRepository);
+  }  */
 
   @Bean
   @ConfigurationProperties('google.defaults')

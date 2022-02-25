@@ -25,6 +25,7 @@ import com.netflix.spinnaker.credentials.CredentialsTypeProperties;
 import com.netflix.spinnaker.credentials.definition.AbstractCredentialsLoader;
 import com.netflix.spinnaker.credentials.poller.Poller;
 import com.netflix.spinnaker.kork.configserver.ConfigFileService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -57,17 +58,55 @@ public class GoogleCredentialsConfiguration {
                     String jsonKey = configFileService.getContents(a.getJsonPath());
 
                     return new GoogleNamedAccountCredentials.Builder()
-                        .jsonKey(jsonKey)
+                        .name(a.getName())
+                        .environment(
+                            StringUtils.isEmpty(a.getEnvironment())
+                                ? a.getName()
+                                : a.getEnvironment())
+                        .accountType(
+                            StringUtils.isEmpty(a.getAccountType())
+                                ? a.getName()
+                                : a.getAccountType())
                         .project(a.getProject())
-                        .applicationName(clouddriverUserAgentApplicationName)
-                        .serviceAccountId(a.getServiceAccountId())
-                        .serviceAccountProject(a.getServiceAccountProject())
                         .computeVersion(
                             a.isAlphaListed() ? ComputeVersion.ALPHA : ComputeVersion.DEFAULT)
+                        .jsonKey(jsonKey)
+                        .serviceAccountId(a.getServiceAccountId())
+                        .serviceAccountProject(a.getServiceAccountProject())
                         .imageProjects(a.getImageProjects())
-                        .instanceTypeDisks(googleDeployDefaults.getInstanceTypeDisks())
+                        //            .requiredGroupMembership(a.getRequiredGroupMembership())
+                        //             .permissions(a.getPermissions().build())
+                        .applicationName(clouddriverUserAgentApplicationName)
+                        .consulConfig(a.getConsul())
+                        //
+                        // .instanceTypeDisks(googleDeployDefaults.getInstanceTypeDisks())
+                        .userDataFile(a.getUserDataFile())
+                        //
+                        // .regionsToManage(a.getRegions(),configurationProperties.getDefaultRegions())
+                        // .namer()
                         .liveLookupsEnabled(false)
                         .build();
+
+                    /*
+                            .name(managedAccount.name)
+                    .environment(managedAccount.environment ?: managedAccount.name)
+                    .accountType(managedAccount.accountType ?: managedAccount.name)
+                    .project(managedAccount.project)
+                    .computeVersion(managedAccount.alphaListed ? ComputeVersion.ALPHA : ComputeVersion.DEFAULT)
+                    .jsonKey(jsonKey)
+                    .serviceAccountId(managedAccount.serviceAccountId)
+                    .serviceAccountProject(managedAccount.serviceAccountProject)
+                    .imageProjects(managedAccount.imageProjects)
+                    .requiredGroupMembership(managedAccount.requiredGroupMembership)
+                    .permissions(managedAccount.permissions.build())
+                    .applicationName(clouddriverUserAgentApplicationName)
+                    .consulConfig(managedAccount.consul)
+                    .instanceTypeDisks(googleDeployDefaults.instanceTypeDisks)
+                    .userDataFile(managedAccount.userDataFile)
+                    .regionsToManage(managedAccount.regions, googleConfigurationProperties.defaultRegions)
+                    .namer(namerRegistry.getNamingStrategy(managedAccount.namingStrategy))
+                    .build()
+                             */
                   } catch (Exception e) {
                     log.info("Error loading Google credentials: " + e.getMessage() + ".");
                     return null;

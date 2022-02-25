@@ -54,6 +54,11 @@ class GoogleInfrastructureProvider extends BaseProvider implements SearchablePro
     this.agents = agents
   }   */
 
+  @Override
+  String getProviderName() {
+    return providerName
+  }
+
 
   GoogleInfrastructureProvider() {
   }
