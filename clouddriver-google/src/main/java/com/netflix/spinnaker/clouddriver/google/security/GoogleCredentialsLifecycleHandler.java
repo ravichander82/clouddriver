@@ -22,6 +22,7 @@ import com.netflix.spinnaker.clouddriver.google.provider.GoogleInfrastructurePro
 import com.netflix.spinnaker.clouddriver.google.provider.agent.*;
 import com.netflix.spinnaker.credentials.CredentialsLifecycleHandler;
 import java.util.*;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -55,8 +56,15 @@ public class GoogleCredentialsLifecycleHandler
 
   private void addAgentFor(GoogleNamedAccountCredentials credentials) {
 
-    //   List<String> regions = (List<String>)
-    // credentials.getRegions().stream().findAny().get().keySet().stream().collect(Collectors.toList());
+    List<Map> regionZonesMap = credentials.getRegions();
+    List<String> regions = new ArrayList<>();
+    for (Map<String, List<String>> map : regionZonesMap) {
+      List<String> regionList = map.keySet().stream().collect(Collectors.toList());
+      for (String reg : regionList) {
+        regions.add(reg);
+      }
+    }
+    // List<String> reg = regions.forEach((key,value) -> key);
     // filter(x -> x.keySet().stream().collect(Collectors.toList())).collect(Collectors.toList());
     // */
     List<AbstractGoogleCachingAgent> googleCachingAgents = new LinkedList<>();
@@ -102,43 +110,39 @@ public class GoogleCredentialsLifecycleHandler
     objectMapper,
     registry)); */
 
-    /*   for (String region : regions){
-        googleCachingAgents.add(new GoogleSubnetCachingAgent(clouddriverUserAgentApplicationName,
-          credentials,
-          objectMapper,
-          registry,
-          region));
-        googleCachingAgents.add(new GoogleRegionalAddressCachingAgent(clouddriverUserAgentApplicationName,
-          credentials,
-          objectMapper,
-          registry,
-          region));
-    /*    googleCachingAgents.add(new GoogleInternalLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-          credentials,
-          objectMapper,
-          registry,
-          region));  */
-    /*    googleCachingAgents.add(new GoogleInternalHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-          credentials,
-          objectMapper,
-          registry,
-          region));
-    /*    googleCachingAgents.add(new GoogleNetworkLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-          credentials,
-          objectMapper,
-          registry,
-          region));  */
-    /*    googleCachingAgents.add(new GoogleRegionalServerGroupCachingAgent(credentials,
-      googleComputeApiFactory,
+    for (String region : regions) {
+      googleCachingAgents.add(
+          new GoogleSubnetCachingAgent(
+              clouddriverUserAgentApplicationName, credentials, objectMapper, registry, region));
+      googleCachingAgents.add(
+          new GoogleRegionalAddressCachingAgent(
+              clouddriverUserAgentApplicationName, credentials, objectMapper, registry, region));
+      /*    googleCachingAgents.add(new GoogleInternalLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+      credentials,
+      objectMapper,
       registry,
-      region,
-      objectMapper));
-    googleCachingAgents.add(new GoogleZonalServerGroupCachingAgent(credentials,
-      googleComputeApiFactory,
-      registry,
-      region,
-      objectMapper));   */
-    // }
+      region));  */
+      /*    googleCachingAgents.add(new GoogleInternalHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+            credentials,
+            objectMapper,
+            registry,
+            region));
+      /*    googleCachingAgents.add(new GoogleNetworkLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+            credentials,
+            objectMapper,
+            registry,
+            region));  */
+      /*    googleCachingAgents.add(new GoogleRegionalServerGroupCachingAgent(credentials,
+        googleComputeApiFactory,
+        registry,
+        region,
+        objectMapper));
+      googleCachingAgents.add(new GoogleZonalServerGroupCachingAgent(credentials,
+        googleComputeApiFactory,
+        registry,
+        region,
+        objectMapper));   */
+    }
 
     googleInfrastructureProvider.addAgents(googleCachingAgents);
   }
