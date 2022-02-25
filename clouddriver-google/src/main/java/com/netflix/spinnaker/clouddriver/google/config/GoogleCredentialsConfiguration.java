@@ -78,10 +78,8 @@ public class GoogleCredentialsConfiguration {
                         .permissions(a.getPermissions().build())
                         .applicationName(clouddriverUserAgentApplicationName)
                         .consulConfig(a.getConsul())
-                        //
                         .instanceTypeDisks(googleDeployDefaults.getInstanceTypeDisks())
                         .userDataFile(a.getUserDataFile())
-                        //
                         .regionsToManage(
                             a.getRegions(), configurationProperties.getDefaultRegions())
                         // .namer()
