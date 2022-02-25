@@ -74,15 +74,16 @@ public class GoogleCredentialsConfiguration {
                         .serviceAccountId(a.getServiceAccountId())
                         .serviceAccountProject(a.getServiceAccountProject())
                         .imageProjects(a.getImageProjects())
-                        //            .requiredGroupMembership(a.getRequiredGroupMembership())
-                        //             .permissions(a.getPermissions().build())
+                        .requiredGroupMembership(a.getRequiredGroupMembership())
+                        .permissions(a.getPermissions().build())
                         .applicationName(clouddriverUserAgentApplicationName)
                         .consulConfig(a.getConsul())
                         //
-                        // .instanceTypeDisks(googleDeployDefaults.getInstanceTypeDisks())
+                        .instanceTypeDisks(googleDeployDefaults.getInstanceTypeDisks())
                         .userDataFile(a.getUserDataFile())
                         //
-                        // .regionsToManage(a.getRegions(),configurationProperties.getDefaultRegions())
+                        .regionsToManage(
+                            a.getRegions(), configurationProperties.getDefaultRegions())
                         // .namer()
                         .liveLookupsEnabled(false)
                         .build();
