@@ -16,13 +16,13 @@
 
 package com.netflix.spinnaker.config
 
-import com.netflix.spinnaker.clouddriver.google.ComputeVersion
+
 import com.netflix.spinnaker.clouddriver.google.GoogleCloudProvider
 import com.netflix.spinnaker.clouddriver.google.GoogleExecutor
-import com.netflix.spinnaker.clouddriver.google.compute.GoogleComputeApiFactory
 import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
 import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsConfiguration
 import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsDefinitionSource
+
 import com.netflix.spinnaker.clouddriver.google.deploy.GoogleOperationPoller
 import com.netflix.spinnaker.clouddriver.google.health.GoogleHealthIndicator
 import com.netflix.spinnaker.clouddriver.google.model.GoogleDisk
@@ -34,20 +34,15 @@ import com.netflix.spinnaker.credentials.CredentialsLifecycleHandler
 import com.netflix.spinnaker.credentials.CredentialsRepository
 import com.netflix.spinnaker.credentials.MapBackedCredentialsRepository
 import com.netflix.spinnaker.credentials.definition.AbstractCredentialsLoader
-import com.netflix.spinnaker.credentials.definition.BasicCredentialsLoader
 import com.netflix.spinnaker.credentials.definition.CredentialsDefinitionSource
 import com.netflix.spinnaker.credentials.poller.Poller
-import com.netflix.spinnaker.kork.configserver.ConfigFileService
 import groovy.transform.ToString
-import org.apache.commons.lang3.StringUtils
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.*
 import org.springframework.scheduling.annotation.EnableScheduling
-
-import javax.annotation.Nullable
 
 @Configuration
 @EnableConfigurationProperties
@@ -85,10 +80,6 @@ class GoogleConfiguration {
     new GoogleExecutor()
   }
 
-  @Bean
-  static GoogleCredentialsDefinitionSource googleCredentialsDefinitionSource(){
-    new GoogleCredentialsDefinitionSource()
-  }
 
   @Bean
   @ConditionalOnMissingBean(
@@ -98,7 +89,7 @@ class GoogleConfiguration {
     CredentialsLifecycleHandler<GoogleNamedAccountCredentials> eventHandler) {
     return new MapBackedCredentialsRepository<>(GoogleCloudProvider.ID, eventHandler)
   }
-
+/*
   @Bean
   @ConditionalOnMissingBean(
     value = GoogleNamedAccountCredentials.class,
@@ -106,6 +97,7 @@ class GoogleConfiguration {
   public AbstractCredentialsLoader<GoogleNamedAccountCredentials> googleCredentialsLoader(
     CredentialsDefinitionSource<GoogleConfigurationProperties.ManagedAccount> googleCredentialsSource,
     GoogleConfigurationProperties configurationProperties,
+    GoogleCredentialsParser googleCredentialsParser,
     CredentialsRepository<GoogleNamedAccountCredentials> googleCredentialsRepository,
     ConfigFileService configFileService) {
 
@@ -114,29 +106,9 @@ class GoogleConfiguration {
     }
     return new BasicCredentialsLoader<>(
       googleCredentialsSource,
-      { managedAccount ->
-        new GoogleNamedAccountCredentials.Builder()
-          .name(managedAccount.name)
-          .environment(managedAccount.environment ?: managedAccount.name)
-          .accountType(managedAccount.accountType ?: managedAccount.name)
-          .project(managedAccount.project)
-          .computeVersion(managedAccount.alphaListed ? ComputeVersion.ALPHA : ComputeVersion.DEFAULT)
-          .jsonKey(configFileService.getContents(managedAccount.jsonPath))
-          .serviceAccountId(managedAccount.serviceAccountId)
-          .serviceAccountProject(managedAccount.serviceAccountProject)
-          .imageProjects(managedAccount.imageProjects)
-          .requiredGroupMembership(managedAccount.requiredGroupMembership)
-          .permissions(managedAccount.permissions.build())
-        //     .applicationName(clouddriverUserAgentApplicationName)
-          .consulConfig(managedAccount.consul)
-        //     .instanceTypeDisks(googleDeployDefaults.instanceTypeDisks)
-          .userDataFile(managedAccount.userDataFile)
-        //     .regionsToManage(managedAccount.regions, googleConfigurationProperties.defaultRegions)
-        //     .namer(namerRegistry.getNamingStrategy(managedAccount.namingStrategy))
-          .build()
-      },
+      googleCredentialsParser,
       googleCredentialsRepository)
-  }
+  } */
 
   @Bean
   @ConditionalOnMissingBean(
