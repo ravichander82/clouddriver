@@ -16,23 +16,30 @@
 
 package com.netflix.spinnaker.config
 
+import com.netflix.spinnaker.clouddriver.google.ComputeVersion
 import com.netflix.spinnaker.clouddriver.google.GoogleCloudProvider
 import com.netflix.spinnaker.clouddriver.google.GoogleExecutor
 import com.netflix.spinnaker.clouddriver.google.compute.GoogleComputeApiFactory
 import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
 import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsConfiguration
+import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsDefinitionSource
 import com.netflix.spinnaker.clouddriver.google.deploy.GoogleOperationPoller
 import com.netflix.spinnaker.clouddriver.google.health.GoogleHealthIndicator
 import com.netflix.spinnaker.clouddriver.google.model.GoogleDisk
 import com.netflix.spinnaker.clouddriver.google.model.GoogleInstanceTypeDisk
 import com.netflix.spinnaker.clouddriver.google.provider.GoogleInfrastructureProvider
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
+import com.netflix.spinnaker.clouddriver.security.CredentialsInitializerSynchronizable
 import com.netflix.spinnaker.credentials.CredentialsLifecycleHandler
 import com.netflix.spinnaker.credentials.CredentialsRepository
 import com.netflix.spinnaker.credentials.MapBackedCredentialsRepository
 import com.netflix.spinnaker.credentials.definition.AbstractCredentialsLoader
 import com.netflix.spinnaker.credentials.definition.BasicCredentialsLoader
+import com.netflix.spinnaker.credentials.definition.CredentialsDefinitionSource
+import com.netflix.spinnaker.credentials.poller.Poller
+import com.netflix.spinnaker.kork.configserver.ConfigFileService
 import groovy.transform.ToString
+import org.apache.commons.lang3.StringUtils
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -47,7 +54,7 @@ import javax.annotation.Nullable
 @EnableScheduling
 @ConditionalOnProperty('google.enabled')
 @ComponentScan(["com.netflix.spinnaker.clouddriver.google"])
-@Import([ GoogleCredentialsConfiguration ])
+@Import([ GoogleCredentialsConfiguration , GoogleCredentialsDefinitionSource ])
 class GoogleConfiguration {
 
   private static final String DEFAULT_KEY = "default"
@@ -79,34 +86,72 @@ class GoogleConfiguration {
   }
 
   @Bean
+  static GoogleCredentialsDefinitionSource googleCredentialsDefinitionSource(){
+    new GoogleCredentialsDefinitionSource()
+  }
+
+  @Bean
   @ConditionalOnMissingBean(
     value = GoogleNamedAccountCredentials.class,
     parameterizedContainer = CredentialsRepository.class)
   public CredentialsRepository<GoogleNamedAccountCredentials> googleCredentialsRepository(
     CredentialsLifecycleHandler<GoogleNamedAccountCredentials> eventHandler) {
-    return new MapBackedCredentialsRepository<>(GoogleCloudProvider.ID, eventHandler);
+    return new MapBackedCredentialsRepository<>(GoogleCloudProvider.ID, eventHandler)
   }
-/*
+
   @Bean
   @ConditionalOnMissingBean(
     value = GoogleNamedAccountCredentials.class,
     parameterizedContainer = AbstractCredentialsLoader.class)
   public AbstractCredentialsLoader<GoogleNamedAccountCredentials> googleCredentialsLoader(
-    @Nullable
-      CredentialsDefinitionSource<GoogleConfigurationProperties.ManagedAccount>
-  googleCredentialSource,
-  GoogleConfigurationProperties configurationProperties,
-                                    googleCredentials.Factory credentialFactory,
-                                                                  CredentialsRepository<GoogleNamedAccountCredentials> kubernetesCredentialsRepository) {
+    CredentialsDefinitionSource<GoogleConfigurationProperties.ManagedAccount> googleCredentialsSource,
+    GoogleConfigurationProperties configurationProperties,
+    CredentialsRepository<GoogleNamedAccountCredentials> googleCredentialsRepository,
+    ConfigFileService configFileService) {
 
-    if (googleCredentialSource == null) {
-     googleCredentialSource = configurationProperties::getAccounts;
+    if (googleCredentialsSource == null) {
+     googleCredentialsSource = configurationProperties.getAccounts()
     }
     return new BasicCredentialsLoader<>(
-      googleCredentialSource,
-      a -> new GoogleNamedAccountCredentials(a, credentialFactory),
-      googleCredentialsRepository);
-  }  */
+      googleCredentialsSource,
+      { managedAccount ->
+        new GoogleNamedAccountCredentials.Builder()
+          .name(managedAccount.name)
+          .environment(managedAccount.environment ?: managedAccount.name)
+          .accountType(managedAccount.accountType ?: managedAccount.name)
+          .project(managedAccount.project)
+          .computeVersion(managedAccount.alphaListed ? ComputeVersion.ALPHA : ComputeVersion.DEFAULT)
+          .jsonKey(configFileService.getContents(managedAccount.jsonPath))
+          .serviceAccountId(managedAccount.serviceAccountId)
+          .serviceAccountProject(managedAccount.serviceAccountProject)
+          .imageProjects(managedAccount.imageProjects)
+          .requiredGroupMembership(managedAccount.requiredGroupMembership)
+          .permissions(managedAccount.permissions.build())
+        //     .applicationName(clouddriverUserAgentApplicationName)
+          .consulConfig(managedAccount.consul)
+        //     .instanceTypeDisks(googleDeployDefaults.instanceTypeDisks)
+          .userDataFile(managedAccount.userDataFile)
+        //     .regionsToManage(managedAccount.regions, googleConfigurationProperties.defaultRegions)
+        //     .namer(namerRegistry.getNamingStrategy(managedAccount.namingStrategy))
+          .build()
+      },
+      googleCredentialsRepository)
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(
+    value = GoogleConfigurationProperties.ManagedAccount.class,
+    parameterizedContainer = CredentialsDefinitionSource.class)
+  public CredentialsInitializerSynchronizable googleCredentialsInitializerSynchronizable(
+    AbstractCredentialsLoader<GoogleNamedAccountCredentials> loader) {
+    final Poller<GoogleNamedAccountCredentials> poller = new Poller<>(loader)
+    return new CredentialsInitializerSynchronizable() {
+      @Override
+      public void synchronize() {
+        poller.run()
+      }
+    }
+  }
 
   @Bean
   @ConfigurationProperties('google.defaults')
