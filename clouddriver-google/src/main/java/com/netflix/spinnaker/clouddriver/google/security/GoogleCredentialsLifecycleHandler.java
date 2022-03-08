@@ -81,7 +81,7 @@ public class GoogleCredentialsLifecycleHandler
     googleCachingAgents.add(
         new GoogleHealthCheckCachingAgent(
             clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
-    /*    googleCachingAgents.add(new GoogleSslLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
+    /*   googleCachingAgents.add(new GoogleSslLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
     credentials,
     objectMapper,
     registry));  */

@@ -20,9 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.netflix.spinnaker.credentials.definition.CredentialsDefinitionSource;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.stereotype.Component;
 
-@Component
 public class GoogleCredentialsDefinitionSource
     implements CredentialsDefinitionSource<GoogleConfigurationProperties.ManagedAccount> {
 
@@ -32,7 +30,7 @@ public class GoogleCredentialsDefinitionSource
   public List<GoogleConfigurationProperties.ManagedAccount> getCredentialsDefinitions() {
     List<GoogleConfigurationProperties.ManagedAccount> googleCredentialsDefinitions =
         new ArrayList<>();
-
+    /*
     GoogleConfigurationProperties.ManagedAccount managedAccount1 =
         new GoogleConfigurationProperties.ManagedAccount();
     managedAccount1.setProject("main-host-project-162535");
@@ -47,7 +45,7 @@ public class GoogleCredentialsDefinitionSource
     managedAccount2.setJsonPath("/home/ravichander/.gcp/service-project-326811-0be6357415ba.json");
 
     googleCredentialsDefinitions.add(managedAccount1);
-    googleCredentialsDefinitions.add(managedAccount2);
+    googleCredentialsDefinitions.add(managedAccount2);  */
 
     return ImmutableList.copyOf(googleCredentialsDefinitions);
   }

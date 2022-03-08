@@ -23,7 +23,6 @@ import com.netflix.spinnaker.config.GoogleConfiguration;
 import com.netflix.spinnaker.credentials.CredentialsTypeBaseConfiguration;
 import com.netflix.spinnaker.credentials.CredentialsTypeProperties;
 import com.netflix.spinnaker.credentials.definition.AbstractCredentialsLoader;
-import com.netflix.spinnaker.credentials.definition.CredentialsDefinitionSource;
 import com.netflix.spinnaker.credentials.poller.Poller;
 import com.netflix.spinnaker.kork.configserver.ConfigFileService;
 import org.apache.commons.lang3.StringUtils;
@@ -45,13 +44,11 @@ public class GoogleCredentialsConfiguration {
           GoogleConfigurationProperties configurationProperties,
           ConfigFileService configFileService,
           GoogleConfiguration.DeployDefaults googleDeployDefaults,
-          CredentialsDefinitionSource<GoogleConfigurationProperties.ManagedAccount>
-              googleCredentialsSource,
           String clouddriverUserAgentApplicationName) {
 
-    if (googleCredentialsSource == null) {
+    /*   if (googleCredentialsSource == null) {
       googleCredentialsSource = configurationProperties::getAccounts;
-    }
+    }  */
 
     return new CredentialsTypeBaseConfiguration(
         applicationContext,
@@ -119,7 +116,7 @@ public class GoogleCredentialsConfiguration {
                     return null;
                   }
                 })
-            .defaultCredentialsSource(googleCredentialsSource)
+            .defaultCredentialsSource(configurationProperties::getAccounts)
             .build());
   }
 

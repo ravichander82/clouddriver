@@ -49,7 +49,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @EnableScheduling
 @ConditionalOnProperty('google.enabled')
 @ComponentScan(["com.netflix.spinnaker.clouddriver.google"])
-@Import([ GoogleCredentialsConfiguration , GoogleCredentialsDefinitionSource ])
+@Import([ GoogleCredentialsConfiguration ])
 class GoogleConfiguration {
 
   private static final String DEFAULT_KEY = "default"
