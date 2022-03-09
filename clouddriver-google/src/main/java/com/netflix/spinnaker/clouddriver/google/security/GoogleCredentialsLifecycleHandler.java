@@ -139,7 +139,7 @@ public class GoogleCredentialsLifecycleHandler
     }
 
     googleInfrastructureProvider.addAgents(googleCachingAgents);
-    //  googleInfrastructureProvider.addAgents(googleServerGroupAgents);
+    googleInfrastructureProvider.addAgents(googleServerGroupAgents);
   }
 
   /*
