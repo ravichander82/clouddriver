@@ -17,7 +17,9 @@
 package com.netflix.spinnaker.clouddriver.google.config;
 
 import com.netflix.spinnaker.clouddriver.google.ComputeVersion;
+import com.netflix.spinnaker.clouddriver.google.compute.GoogleComputeApiFactory;
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials;
+import com.netflix.spinnaker.clouddriver.names.NamerRegistry;
 import com.netflix.spinnaker.clouddriver.security.CredentialsInitializerSynchronizable;
 import com.netflix.spinnaker.config.GoogleConfiguration;
 import com.netflix.spinnaker.credentials.CredentialsTypeBaseConfiguration;
@@ -28,6 +30,7 @@ import com.netflix.spinnaker.kork.configserver.ConfigFileService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +38,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GoogleCredentialsConfiguration {
   private static final Logger log = LoggerFactory.getLogger(GoogleCredentialsConfiguration.class);
+
+  @Autowired NamerRegistry namerRegistry;
 
   @Bean
   public CredentialsTypeBaseConfiguration<
@@ -44,6 +49,7 @@ public class GoogleCredentialsConfiguration {
           GoogleConfigurationProperties configurationProperties,
           ConfigFileService configFileService,
           GoogleConfiguration.DeployDefaults googleDeployDefaults,
+          GoogleComputeApiFactory googleComputeApiFactory,
           String clouddriverUserAgentApplicationName) {
 
     /*   if (googleCredentialsSource == null) {
@@ -87,7 +93,7 @@ public class GoogleCredentialsConfiguration {
                         .userDataFile(a.getUserDataFile())
                         .regionsToManage(
                             a.getRegions(), configurationProperties.getDefaultRegions())
-                        // .namer()
+                        .namer(namerRegistry.getNamingStrategy(a.getNamingStrategy()))
                         .liveLookupsEnabled(false)
                         .build();
 

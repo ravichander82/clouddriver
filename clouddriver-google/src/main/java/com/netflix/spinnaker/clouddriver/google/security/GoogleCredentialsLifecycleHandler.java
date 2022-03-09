@@ -18,6 +18,8 @@ package com.netflix.spinnaker.clouddriver.google.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.spectator.api.Registry;
+import com.netflix.spinnaker.clouddriver.google.compute.GoogleComputeApiFactory;
+import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties;
 import com.netflix.spinnaker.clouddriver.google.provider.GoogleInfrastructureProvider;
 import com.netflix.spinnaker.clouddriver.google.provider.agent.*;
 import com.netflix.spinnaker.credentials.CredentialsLifecycleHandler;
@@ -32,6 +34,8 @@ public class GoogleCredentialsLifecycleHandler
     implements CredentialsLifecycleHandler<GoogleNamedAccountCredentials> {
 
   private final GoogleInfrastructureProvider googleInfrastructureProvider;
+  private final GoogleConfigurationProperties googleConfigurationProperties;
+  private final GoogleComputeApiFactory googleComputeApiFactory;
   private final ObjectMapper objectMapper;
   private final Registry registry;
   private final String clouddriverUserAgentApplicationName;
@@ -68,47 +72,46 @@ public class GoogleCredentialsLifecycleHandler
     // filter(x -> x.keySet().stream().collect(Collectors.toList())).collect(Collectors.toList());
     // */
     List<AbstractGoogleCachingAgent> googleCachingAgents = new LinkedList<>();
+    List<AbstractGoogleServerGroupCachingAgent> googleServerGroupAgents = new LinkedList<>();
+
     googleCachingAgents.add(
         new GoogleSecurityGroupCachingAgent(
             clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
-    /*   googleCachingAgents.add(new GoogleNetworkCachingAgent(clouddriverUserAgentApplicationName,
-    credentials,
-    objectMapper,
-    registry));  */
+    googleCachingAgents.add(
+        new GoogleNetworkCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
     googleCachingAgents.add(
         new GoogleGlobalAddressCachingAgent(
             clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
     googleCachingAgents.add(
         new GoogleHealthCheckCachingAgent(
             clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
-    /*   googleCachingAgents.add(new GoogleSslLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-    credentials,
-    objectMapper,
-    registry));  */
+    googleCachingAgents.add(
+        new GoogleSslLoadBalancerCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
     googleCachingAgents.add(
         new GoogleSslCertificateCachingAgent(
             clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
-    /*   googleCachingAgents.add(new GoogleTcpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-    credentials,
-    objectMapper,
-    registry));  */
+    googleCachingAgents.add(
+        new GoogleTcpLoadBalancerCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
     googleCachingAgents.add(
         new GoogleBackendServiceCachingAgent(
             clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
-    /*   googleCachingAgents.add(new GoogleInstanceCachingAgent(clouddriverUserAgentApplicationName,
-    credentials,
-    objectMapper,
-    registry));  */
-    /*   googleCachingAgents.add(new GoogleImageCachingAgent(clouddriverUserAgentApplicationName,
-    credentials,
-    objectMapper,
-    registry,
-    credentials.getImageProjects(),
-    googleConfigurationProperties.getBaseImageProjects()));  */
-    /*  googleCachingAgents.add(new GoogleHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-    credentials,
-    objectMapper,
-    registry)); */
+    googleCachingAgents.add(
+        new GoogleInstanceCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
+    googleCachingAgents.add(
+        new GoogleImageCachingAgent(
+            clouddriverUserAgentApplicationName,
+            credentials,
+            objectMapper,
+            registry,
+            credentials.getImageProjects(),
+            googleConfigurationProperties.getBaseImageProjects()));
+    googleCachingAgents.add(
+        new GoogleHttpLoadBalancerCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
 
     for (String region : regions) {
       googleCachingAgents.add(
@@ -117,34 +120,26 @@ public class GoogleCredentialsLifecycleHandler
       googleCachingAgents.add(
           new GoogleRegionalAddressCachingAgent(
               clouddriverUserAgentApplicationName, credentials, objectMapper, registry, region));
-      /*    googleCachingAgents.add(new GoogleInternalLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-      credentials,
-      objectMapper,
-      registry,
-      region));  */
-      /*    googleCachingAgents.add(new GoogleInternalHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-            credentials,
-            objectMapper,
-            registry,
-            region));
-      /*    googleCachingAgents.add(new GoogleNetworkLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-            credentials,
-            objectMapper,
-            registry,
-            region));  */
-      /*    googleCachingAgents.add(new GoogleRegionalServerGroupCachingAgent(credentials,
-        googleComputeApiFactory,
-        registry,
-        region,
-        objectMapper));
-      googleCachingAgents.add(new GoogleZonalServerGroupCachingAgent(credentials,
-        googleComputeApiFactory,
-        registry,
-        region,
-        objectMapper));   */
+      googleCachingAgents.add(
+          new GoogleInternalLoadBalancerCachingAgent(
+              clouddriverUserAgentApplicationName, credentials, objectMapper, registry, region));
+      googleCachingAgents.add(
+          new GoogleInternalHttpLoadBalancerCachingAgent(
+              clouddriverUserAgentApplicationName, credentials, objectMapper, registry, region));
+      googleCachingAgents.add(
+          new GoogleNetworkLoadBalancerCachingAgent(
+              clouddriverUserAgentApplicationName, credentials, objectMapper, registry, region));
+
+      googleServerGroupAgents.add(
+          new GoogleRegionalServerGroupCachingAgent(
+              credentials, googleComputeApiFactory, registry, region, objectMapper));
+      googleServerGroupAgents.add(
+          new GoogleZonalServerGroupCachingAgent(
+              credentials, googleComputeApiFactory, registry, region, objectMapper));
     }
 
     googleInfrastructureProvider.addAgents(googleCachingAgents);
+    //  googleInfrastructureProvider.addAgents(googleServerGroupAgents);
   }
 
   /*

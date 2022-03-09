@@ -39,7 +39,7 @@ class GoogleNetworkLoadBalancer extends GoogleLoadBalancer {
   }
 
   class View extends GoogleLoadBalancerView {
-    final String type = GoogleCloudProvider.ID
+  //  final String type = GoogleCloudProvider.ID
     GoogleLoadBalancerType loadBalancerType = GoogleNetworkLoadBalancer.this.type
     GoogleLoadBalancingScheme loadBalancingScheme = GoogleNetworkLoadBalancer.this.loadBalancingScheme
 
