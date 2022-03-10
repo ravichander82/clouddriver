@@ -22,7 +22,6 @@ import com.netflix.spinnaker.clouddriver.google.GoogleExecutor
 import com.netflix.spinnaker.clouddriver.google.compute.GoogleComputeApiFactory
 import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
 import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsConfiguration
-import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsDefinitionSource
 
 import com.netflix.spinnaker.clouddriver.google.deploy.GoogleOperationPoller
 import com.netflix.spinnaker.clouddriver.google.health.GoogleHealthIndicator
@@ -90,26 +89,6 @@ class GoogleConfiguration {
     CredentialsLifecycleHandler<GoogleNamedAccountCredentials> eventHandler) {
     return new MapBackedCredentialsRepository<>(GoogleCloudProvider.ID, eventHandler)
   }
-/*
-  @Bean
-  @ConditionalOnMissingBean(
-    value = GoogleNamedAccountCredentials.class,
-    parameterizedContainer = AbstractCredentialsLoader.class)
-  public AbstractCredentialsLoader<GoogleNamedAccountCredentials> googleCredentialsLoader(
-    CredentialsDefinitionSource<GoogleConfigurationProperties.ManagedAccount> googleCredentialsSource,
-    GoogleConfigurationProperties configurationProperties,
-    GoogleCredentialsParser googleCredentialsParser,
-    CredentialsRepository<GoogleNamedAccountCredentials> googleCredentialsRepository,
-    ConfigFileService configFileService) {
-
-    if (googleCredentialsSource == null) {
-     googleCredentialsSource = configurationProperties.getAccounts()
-    }
-    return new BasicCredentialsLoader<>(
-      googleCredentialsSource,
-      googleCredentialsParser,
-      googleCredentialsRepository)
-  } */
 
   @Bean
   @ConditionalOnMissingBean(

@@ -61,12 +61,11 @@ public class GoogleCredentialsLifecycleHandler
   private void addAgentFor(GoogleNamedAccountCredentials credentials) {
 
     List<Map> regionZonesMap = credentials.getRegions();
+
     List<String> regions = new ArrayList<>();
     for (Map<String, List<String>> map : regionZonesMap) {
-      List<String> regionList = map.keySet().stream().collect(Collectors.toList());
-      for (String reg : regionList) {
-        regions.add(reg);
-      }
+      String reg = String.valueOf(map.get("name"));
+      regions.add(reg);
     }
 
     List<AbstractGoogleCachingAgent> googleCachingAgents = new LinkedList<>();

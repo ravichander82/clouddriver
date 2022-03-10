@@ -17,6 +17,7 @@
 package com.netflix.spinnaker.clouddriver.google.config;
 
 import com.netflix.spinnaker.clouddriver.google.ComputeVersion;
+import com.netflix.spinnaker.clouddriver.google.GoogleExecutor;
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials;
 import com.netflix.spinnaker.clouddriver.names.NamerRegistry;
 import com.netflix.spinnaker.clouddriver.security.CredentialsInitializerSynchronizable;
@@ -48,6 +49,7 @@ public class GoogleCredentialsConfiguration {
           GoogleConfigurationProperties configurationProperties,
           ConfigFileService configFileService,
           GoogleConfiguration.DeployDefaults googleDeployDefaults,
+          GoogleExecutor googleExecutor,
           String clouddriverUserAgentApplicationName) {
 
     return new CredentialsTypeBaseConfiguration(
@@ -88,7 +90,6 @@ public class GoogleCredentialsConfiguration {
                         .regionsToManage(
                             a.getRegions(), configurationProperties.getDefaultRegions())
                         .namer(namerRegistry.getNamingStrategy(a.getNamingStrategy()))
-                        //   .liveLookupsEnabled(false)
                         .build();
                   } catch (Exception e) {
                     log.info("Error loading Google credentials: " + e.getMessage() + ".");
