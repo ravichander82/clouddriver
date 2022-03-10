@@ -68,9 +68,7 @@ public class GoogleCredentialsLifecycleHandler
         regions.add(reg);
       }
     }
-    // List<String> reg = regions.forEach((key,value) -> key);
-    // filter(x -> x.keySet().stream().collect(Collectors.toList())).collect(Collectors.toList());
-    // */
+
     List<AbstractGoogleCachingAgent> googleCachingAgents = new LinkedList<>();
     List<AbstractGoogleServerGroupCachingAgent> googleServerGroupAgents = new LinkedList<>();
 
@@ -141,98 +139,4 @@ public class GoogleCredentialsLifecycleHandler
     googleInfrastructureProvider.addAgents(googleCachingAgents);
     googleInfrastructureProvider.addAgents(googleServerGroupAgents);
   }
-
-  /*
-  newlyAddedAgents << new GoogleSecurityGroupCachingAgent(clouddriverUserAgentApplicationName,
-                                                                credentials,
-                                                                objectMapper,
-                                                                registry)
-        newlyAddedAgents << new GoogleNetworkCachingAgent(clouddriverUserAgentApplicationName,
-                                                          credentials,
-                                                          objectMapper,
-                                                          registry)
-
-        newlyAddedAgents << new GoogleGlobalAddressCachingAgent(clouddriverUserAgentApplicationName,
-                                                                credentials,
-                                                                objectMapper,
-                                                                registry)
-
-        regions.each { String region ->
-          newlyAddedAgents << new GoogleSubnetCachingAgent(clouddriverUserAgentApplicationName,
-                                                           credentials,
-                                                           objectMapper,
-                                                           registry,
-                                                           region)
-          newlyAddedAgents << new GoogleRegionalAddressCachingAgent(clouddriverUserAgentApplicationName,
-                                                                    credentials,
-                                                                    objectMapper,
-                                                                    registry,
-                                                                    region)
-        }
-
-        newlyAddedAgents << new GoogleHealthCheckCachingAgent(clouddriverUserAgentApplicationName,
-                                                              credentials,
-                                                              objectMapper,
-                                                              registry)
-        newlyAddedAgents << new GoogleHttpHealthCheckCachingAgent(clouddriverUserAgentApplicationName,
-                                                                  credentials,
-                                                                  objectMapper,
-                                                                  registry)
-        newlyAddedAgents << new GoogleSslLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-                                                                  credentials,
-                                                                  objectMapper,
-                                                                  registry)
-        newlyAddedAgents << new GoogleSslCertificateCachingAgent(clouddriverUserAgentApplicationName,
-                                                                 credentials,
-                                                                 objectMapper,
-                                                                 registry)
-        newlyAddedAgents << new GoogleTcpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-                                                                  credentials,
-                                                                  objectMapper,
-                                                                  registry)
-        newlyAddedAgents << new GoogleBackendServiceCachingAgent(clouddriverUserAgentApplicationName,
-                                                                 credentials,
-                                                                 objectMapper,
-                                                                 registry)
-        newlyAddedAgents << new GoogleInstanceCachingAgent(clouddriverUserAgentApplicationName,
-                                                           credentials,
-                                                           objectMapper,
-                                                           registry)
-        newlyAddedAgents << new GoogleImageCachingAgent(clouddriverUserAgentApplicationName,
-                                                        credentials,
-                                                        objectMapper,
-                                                        registry,
-                                                        credentials.imageProjects,
-                                                        googleConfigurationProperties.baseImageProjects)
-        newlyAddedAgents << new GoogleHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-                                                                   credentials,
-                                                                   objectMapper,
-                                                                   registry)
-        regions.each { String region ->
-          newlyAddedAgents << new GoogleInternalLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-                                                                         credentials,
-                                                                         objectMapper,
-                                                                         registry,
-                                                                         region)
-          newlyAddedAgents << new GoogleInternalHttpLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-                                                                         credentials,
-                                                                         objectMapper,
-                                                                         registry,
-                                                                         region)
-          newlyAddedAgents << new GoogleNetworkLoadBalancerCachingAgent(clouddriverUserAgentApplicationName,
-                                                                        credentials,
-                                                                        objectMapper,
-                                                                        registry,
-                                                                        region)
-          newlyAddedAgents << new GoogleRegionalServerGroupCachingAgent(credentials,
-                                                                        computeApiFactory,
-                                                                        registry,
-                                                                        region,
-                                                                        objectMapper)
-          newlyAddedAgents << new GoogleZonalServerGroupCachingAgent(credentials,
-                                                                     computeApiFactory,
-                                                                     registry,
-                                                                     region,
-                                                                     objectMapper)
-   */
 }

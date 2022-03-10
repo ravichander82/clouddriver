@@ -17,7 +17,6 @@
 package com.netflix.spinnaker.clouddriver.google.config;
 
 import com.netflix.spinnaker.clouddriver.google.ComputeVersion;
-import com.netflix.spinnaker.clouddriver.google.compute.GoogleComputeApiFactory;
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials;
 import com.netflix.spinnaker.clouddriver.names.NamerRegistry;
 import com.netflix.spinnaker.clouddriver.security.CredentialsInitializerSynchronizable;
@@ -49,12 +48,7 @@ public class GoogleCredentialsConfiguration {
           GoogleConfigurationProperties configurationProperties,
           ConfigFileService configFileService,
           GoogleConfiguration.DeployDefaults googleDeployDefaults,
-          GoogleComputeApiFactory googleComputeApiFactory,
           String clouddriverUserAgentApplicationName) {
-
-    /*   if (googleCredentialsSource == null) {
-      googleCredentialsSource = configurationProperties::getAccounts;
-    }  */
 
     return new CredentialsTypeBaseConfiguration(
         applicationContext,
@@ -96,27 +90,6 @@ public class GoogleCredentialsConfiguration {
                         .namer(namerRegistry.getNamingStrategy(a.getNamingStrategy()))
                         .liveLookupsEnabled(false)
                         .build();
-
-                    /*
-                            .name(managedAccount.name)
-                    .environment(managedAccount.environment ?: managedAccount.name)
-                    .accountType(managedAccount.accountType ?: managedAccount.name)
-                    .project(managedAccount.project)
-                    .computeVersion(managedAccount.alphaListed ? ComputeVersion.ALPHA : ComputeVersion.DEFAULT)
-                    .jsonKey(jsonKey)
-                    .serviceAccountId(managedAccount.serviceAccountId)
-                    .serviceAccountProject(managedAccount.serviceAccountProject)
-                    .imageProjects(managedAccount.imageProjects)
-                    .requiredGroupMembership(managedAccount.requiredGroupMembership)
-                    .permissions(managedAccount.permissions.build())
-                    .applicationName(clouddriverUserAgentApplicationName)
-                    .consulConfig(managedAccount.consul)
-                    .instanceTypeDisks(googleDeployDefaults.instanceTypeDisks)
-                    .userDataFile(managedAccount.userDataFile)
-                    .regionsToManage(managedAccount.regions, googleConfigurationProperties.defaultRegions)
-                    .namer(namerRegistry.getNamingStrategy(managedAccount.namingStrategy))
-                    .build()
-                             */
                   } catch (Exception e) {
                     log.info("Error loading Google credentials: " + e.getMessage() + ".");
                     return null;
