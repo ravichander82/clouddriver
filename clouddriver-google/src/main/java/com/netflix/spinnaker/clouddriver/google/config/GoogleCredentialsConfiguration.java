@@ -88,7 +88,7 @@ public class GoogleCredentialsConfiguration {
                         .regionsToManage(
                             a.getRegions(), configurationProperties.getDefaultRegions())
                         .namer(namerRegistry.getNamingStrategy(a.getNamingStrategy()))
-                        .liveLookupsEnabled(false)
+                        //   .liveLookupsEnabled(false)
                         .build();
                   } catch (Exception e) {
                     log.info("Error loading Google credentials: " + e.getMessage() + ".");
