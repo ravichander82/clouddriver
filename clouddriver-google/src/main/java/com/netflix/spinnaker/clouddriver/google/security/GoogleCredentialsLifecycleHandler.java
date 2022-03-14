@@ -24,7 +24,6 @@ import com.netflix.spinnaker.clouddriver.google.provider.GoogleInfrastructurePro
 import com.netflix.spinnaker.clouddriver.google.provider.agent.*;
 import com.netflix.spinnaker.credentials.CredentialsLifecycleHandler;
 import java.util.*;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -82,6 +81,9 @@ public class GoogleCredentialsLifecycleHandler
             clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
     googleCachingAgents.add(
         new GoogleHealthCheckCachingAgent(
+            clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
+    googleCachingAgents.add(
+        new GoogleHttpHealthCheckCachingAgent(
             clouddriverUserAgentApplicationName, credentials, objectMapper, registry));
     googleCachingAgents.add(
         new GoogleSslLoadBalancerCachingAgent(
