@@ -60,7 +60,6 @@ public class SetStatefulDiskAtomicOperationConverterTest {
             .build();
     when(credentialsRepository.getOne(any())).thenReturn(accountCredentials);
     converter.setCredentialsRepository(credentialsRepository);
-    //  converter.setObjectMapper(new ObjectMapper());
   }
 
   @Test

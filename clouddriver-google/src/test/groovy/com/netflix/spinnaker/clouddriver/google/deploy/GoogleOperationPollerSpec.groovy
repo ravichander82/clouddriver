@@ -21,6 +21,7 @@ import com.google.api.services.compute.model.Operation
 import com.netflix.spectator.api.DefaultRegistry
 import com.netflix.spectator.api.ManualClock
 import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
+
 import spock.lang.Shared
 import spock.lang.Specification
 

@@ -32,7 +32,6 @@ import static com.netflix.spinnaker.clouddriver.google.cache.Keys.Namespace.*
 
 class GoogleInfrastructureProvider extends BaseProvider implements SearchableProvider {
 
-//  final Collection<Agent> agents
   final String providerName = GoogleInfrastructureProvider.name
 
   final Set<String> defaultCaches = [
@@ -48,11 +47,6 @@ class GoogleInfrastructureProvider extends BaseProvider implements SearchablePro
       SERVER_GROUPS.ns,
       SSL_CERTIFICATES.ns,
   ].asImmutable()
-
-  /*
-  GoogleInfrastructureProvider(Collection<Agent> agents) {
-    this.agents = agents
-  }   */
 
   @Override
   String getProviderName() {
