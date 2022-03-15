@@ -18,8 +18,6 @@ package com.netflix.spinnaker.config
 
 
 import com.netflix.spinnaker.clouddriver.google.GoogleCloudProvider
-import com.netflix.spinnaker.clouddriver.google.GoogleExecutor
-import com.netflix.spinnaker.clouddriver.google.compute.GoogleComputeApiFactory
 import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
 import com.netflix.spinnaker.clouddriver.google.config.GoogleCredentialsConfiguration
 
@@ -29,13 +27,9 @@ import com.netflix.spinnaker.clouddriver.google.model.GoogleDisk
 import com.netflix.spinnaker.clouddriver.google.model.GoogleInstanceTypeDisk
 import com.netflix.spinnaker.clouddriver.google.provider.GoogleInfrastructureProvider
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
-import com.netflix.spinnaker.clouddriver.security.CredentialsInitializerSynchronizable
 import com.netflix.spinnaker.credentials.CredentialsLifecycleHandler
 import com.netflix.spinnaker.credentials.CredentialsRepository
 import com.netflix.spinnaker.credentials.MapBackedCredentialsRepository
-import com.netflix.spinnaker.credentials.definition.AbstractCredentialsLoader
-import com.netflix.spinnaker.credentials.definition.CredentialsDefinitionSource
-import com.netflix.spinnaker.credentials.poller.Poller
 import groovy.transform.ToString
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -76,33 +70,12 @@ class GoogleConfiguration {
   }
 
   @Bean
-  GoogleExecutor googleExecutor(){
-    new GoogleExecutor()
-  }
-
-
-  @Bean
   @ConditionalOnMissingBean(
     value = GoogleNamedAccountCredentials.class,
     parameterizedContainer = CredentialsRepository.class)
   public CredentialsRepository<GoogleNamedAccountCredentials> googleCredentialsRepository(
     CredentialsLifecycleHandler<GoogleNamedAccountCredentials> eventHandler) {
     return new MapBackedCredentialsRepository<>(GoogleCloudProvider.ID, eventHandler)
-  }
-
-  @Bean
-  @ConditionalOnMissingBean(
-    value = GoogleConfigurationProperties.ManagedAccount.class,
-    parameterizedContainer = CredentialsDefinitionSource.class)
-  public CredentialsInitializerSynchronizable googleCredentialsInitializerSynchronizable(
-    AbstractCredentialsLoader<GoogleNamedAccountCredentials> loader) {
-    final Poller<GoogleNamedAccountCredentials> poller = new Poller<>(loader)
-    return new CredentialsInitializerSynchronizable() {
-      @Override
-      public void synchronize() {
-        poller.run()
-      }
-    }
   }
 
   @Bean
