@@ -76,7 +76,7 @@ class UpsertGoogleHttpLoadBalancerAtomicOperationUnitSpec extends Specification 
       def credentials = new GoogleNamedAccountCredentials.Builder().name(ACCOUNT_NAME).project(PROJECT_NAME).applicationName("my-application").compute(computeMock).credentials(new FakeGoogleCredentials()).build()
       credentialsRepo.save(credentials)
       def converter = new UpsertGoogleLoadBalancerAtomicOperationConverter(
-          objectMapper: new ObjectMapper()
+        credentialsRepository: credentialsRepo
       )
 
       def globalOperations = Mock(Compute.GlobalOperations)
@@ -242,7 +242,7 @@ class UpsertGoogleHttpLoadBalancerAtomicOperationUnitSpec extends Specification 
       def credentials = new GoogleNamedAccountCredentials.Builder().name(ACCOUNT_NAME).project(PROJECT_NAME).applicationName("my-application").compute(computeMock).credentials(new FakeGoogleCredentials()).build()
       credentialsRepo.save(credentials)
       def converter = new UpsertGoogleLoadBalancerAtomicOperationConverter(
-          objectMapper: new ObjectMapper()
+        credentialsRepository: credentialsRepo
       )
 
       def globalOperations = Mock(Compute.GlobalOperations)
@@ -378,7 +378,7 @@ class UpsertGoogleHttpLoadBalancerAtomicOperationUnitSpec extends Specification 
       def credentials = new GoogleNamedAccountCredentials.Builder().name(ACCOUNT_NAME).project(PROJECT_NAME).applicationName("my-application").compute(computeMock).credentials(new FakeGoogleCredentials()).build()
       credentialsRepo.save(credentials)
       def converter = new UpsertGoogleLoadBalancerAtomicOperationConverter(
-          objectMapper: new ObjectMapper()
+        credentialsRepository: credentialsRepo
       )
 
       def globalOperations = Mock(Compute.GlobalOperations)
@@ -514,7 +514,7 @@ class UpsertGoogleHttpLoadBalancerAtomicOperationUnitSpec extends Specification 
       def credentials = new GoogleNamedAccountCredentials.Builder().name(ACCOUNT_NAME).project(PROJECT_NAME).applicationName("my-application").compute(computeMock).credentials(new FakeGoogleCredentials()).build()
       credentialsRepo.save(credentials)
       def converter = new UpsertGoogleLoadBalancerAtomicOperationConverter(
-        objectMapper: new ObjectMapper()
+        credentialsRepository: credentialsRepo
       )
 
       def globalOperations = Mock(Compute.GlobalOperations)
@@ -684,7 +684,7 @@ class UpsertGoogleHttpLoadBalancerAtomicOperationUnitSpec extends Specification 
       def credentials = new GoogleNamedAccountCredentials.Builder().name(ACCOUNT_NAME).project(PROJECT_NAME).applicationName("my-application").compute(computeMock).credentials(new FakeGoogleCredentials()).build()
       credentialsRepo.save(credentials)
       def converter = new UpsertGoogleLoadBalancerAtomicOperationConverter(
-        objectMapper: new ObjectMapper()
+        credentialsRepository: credentialsRepo
       )
 
       def globalOperations = Mock(Compute.GlobalOperations)
@@ -863,7 +863,7 @@ class UpsertGoogleHttpLoadBalancerAtomicOperationUnitSpec extends Specification 
       def credentials = new GoogleNamedAccountCredentials.Builder().name(ACCOUNT_NAME).project(PROJECT_NAME).applicationName("my-application").compute(computeMock).credentials(new FakeGoogleCredentials()).build()
       credentialsRepo.save(credentials)
       def converter = new UpsertGoogleLoadBalancerAtomicOperationConverter(
-        objectMapper: new ObjectMapper()
+        credentialsRepository: credentialsRepo
       )
 
       def globalOperations = Mock(Compute.GlobalOperations)

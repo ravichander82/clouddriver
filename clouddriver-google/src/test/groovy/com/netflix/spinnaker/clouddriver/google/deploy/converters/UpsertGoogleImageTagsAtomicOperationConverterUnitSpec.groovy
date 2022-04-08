@@ -36,7 +36,7 @@ class UpsertGoogleImageTagsAtomicOperationConverterUnitSpec extends Specificatio
   UpsertGoogleImageTagsAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new UpsertGoogleImageTagsAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new UpsertGoogleImageTagsAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

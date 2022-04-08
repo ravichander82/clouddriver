@@ -37,7 +37,7 @@ class UpsertGoogleServerGroupTagsAtomicOperationConverterUnitSpec extends Specif
   UpsertGoogleServerGroupTagsAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new UpsertGoogleServerGroupTagsAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new UpsertGoogleServerGroupTagsAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

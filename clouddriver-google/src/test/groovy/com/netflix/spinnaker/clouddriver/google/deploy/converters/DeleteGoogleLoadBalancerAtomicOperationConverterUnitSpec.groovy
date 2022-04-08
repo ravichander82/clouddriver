@@ -38,7 +38,7 @@ class DeleteGoogleLoadBalancerAtomicOperationConverterUnitSpec extends Specifica
   DeleteGoogleLoadBalancerAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new DeleteGoogleLoadBalancerAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new DeleteGoogleLoadBalancerAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

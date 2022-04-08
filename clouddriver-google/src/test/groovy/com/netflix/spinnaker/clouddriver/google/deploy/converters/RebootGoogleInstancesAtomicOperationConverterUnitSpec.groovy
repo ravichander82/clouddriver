@@ -35,7 +35,7 @@ class RebootGoogleInstancesAtomicOperationConverterUnitSpec extends Specificatio
   RebootGoogleInstancesAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new RebootGoogleInstancesAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new RebootGoogleInstancesAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

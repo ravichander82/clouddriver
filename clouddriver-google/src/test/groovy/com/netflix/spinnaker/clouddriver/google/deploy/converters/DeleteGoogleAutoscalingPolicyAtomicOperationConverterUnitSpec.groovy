@@ -35,7 +35,7 @@ class DeleteGoogleAutoscalingPolicyAtomicOperationConverterUnitSpec extends Spec
   DeleteGoogleAutoscalingPolicyAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new DeleteGoogleAutoscalingPolicyAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new DeleteGoogleAutoscalingPolicyAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

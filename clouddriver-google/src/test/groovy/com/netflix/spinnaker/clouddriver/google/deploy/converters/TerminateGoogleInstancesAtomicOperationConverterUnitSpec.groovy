@@ -35,7 +35,7 @@ class TerminateGoogleInstancesAtomicOperationConverterUnitSpec extends Specifica
   TerminateGoogleInstancesAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new TerminateGoogleInstancesAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new TerminateGoogleInstancesAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

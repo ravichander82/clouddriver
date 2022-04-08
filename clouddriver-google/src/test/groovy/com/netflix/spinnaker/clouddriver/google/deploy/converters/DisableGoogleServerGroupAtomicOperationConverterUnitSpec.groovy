@@ -37,7 +37,7 @@ class DisableGoogleServerGroupAtomicOperationConverterUnitSpec extends Specifica
   DisableGoogleServerGroupAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new DisableGoogleServerGroupAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new DisableGoogleServerGroupAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

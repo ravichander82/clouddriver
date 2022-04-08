@@ -46,7 +46,7 @@ class BasicGoogleDeployAtomicOperationConverterUnitSpec extends Specification {
   BasicGoogleDeployAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new BasicGoogleDeployAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new BasicGoogleDeployAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

@@ -38,7 +38,7 @@ class UpsertGoogleAutoscalingPolicyAtomicOperationConverterUnitSpec extends Spec
   UpsertGoogleAutoscalingPolicyAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new UpsertGoogleAutoscalingPolicyAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new UpsertGoogleAutoscalingPolicyAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

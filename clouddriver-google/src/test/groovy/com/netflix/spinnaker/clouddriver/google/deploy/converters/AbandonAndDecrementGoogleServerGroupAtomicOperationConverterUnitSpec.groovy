@@ -36,7 +36,7 @@ class AbandonAndDecrementGoogleServerGroupAtomicOperationConverterUnitSpec exten
   AbandonAndDecrementGoogleServerGroupAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new AbandonAndDecrementGoogleServerGroupAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new AbandonAndDecrementGoogleServerGroupAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

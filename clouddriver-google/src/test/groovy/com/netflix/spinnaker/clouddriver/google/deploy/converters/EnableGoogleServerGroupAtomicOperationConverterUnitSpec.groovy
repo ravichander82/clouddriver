@@ -36,7 +36,7 @@ class EnableGoogleServerGroupAtomicOperationConverterUnitSpec extends Specificat
   EnableGoogleServerGroupAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new EnableGoogleServerGroupAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new EnableGoogleServerGroupAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

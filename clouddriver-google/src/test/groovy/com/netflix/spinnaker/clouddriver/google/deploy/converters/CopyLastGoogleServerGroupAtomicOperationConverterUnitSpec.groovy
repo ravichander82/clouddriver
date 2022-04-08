@@ -43,7 +43,7 @@ class CopyLastGoogleServerGroupAtomicOperationConverterUnitSpec extends Specific
   CopyLastGoogleServerGroupAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new CopyLastGoogleServerGroupAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new CopyLastGoogleServerGroupAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

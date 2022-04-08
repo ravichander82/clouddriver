@@ -36,7 +36,7 @@ class DeleteGoogleSecurityGroupAtomicOperationConverterUnitSpec extends Specific
   DeleteGoogleSecurityGroupAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new DeleteGoogleSecurityGroupAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new DeleteGoogleSecurityGroupAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

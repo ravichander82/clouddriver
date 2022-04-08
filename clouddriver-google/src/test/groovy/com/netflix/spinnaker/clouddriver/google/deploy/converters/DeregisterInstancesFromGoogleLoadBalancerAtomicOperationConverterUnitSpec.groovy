@@ -37,7 +37,7 @@ class DeregisterInstancesFromGoogleLoadBalancerAtomicOperationConverterUnitSpec 
   DeregisterInstancesFromGoogleLoadBalancerAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new DeregisterInstancesFromGoogleLoadBalancerAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new DeregisterInstancesFromGoogleLoadBalancerAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

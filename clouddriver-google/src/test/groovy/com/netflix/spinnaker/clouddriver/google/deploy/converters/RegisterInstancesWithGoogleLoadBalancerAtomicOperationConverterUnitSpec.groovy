@@ -37,7 +37,7 @@ class RegisterInstancesWithGoogleLoadBalancerAtomicOperationConverterUnitSpec ex
   RegisterInstancesWithGoogleLoadBalancerAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new RegisterInstancesWithGoogleLoadBalancerAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new RegisterInstancesWithGoogleLoadBalancerAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

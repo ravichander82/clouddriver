@@ -39,7 +39,7 @@ class CreateGoogleInstanceAtomicOperationConverterUnitSpec extends Specification
   CreateGoogleInstanceAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new CreateGoogleInstanceAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new CreateGoogleInstanceAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

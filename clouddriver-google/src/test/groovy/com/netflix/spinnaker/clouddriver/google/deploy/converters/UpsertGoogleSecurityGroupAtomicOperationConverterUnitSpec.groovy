@@ -41,7 +41,7 @@ class UpsertGoogleSecurityGroupAtomicOperationConverterUnitSpec extends Specific
   UpsertGoogleSecurityGroupAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new UpsertGoogleSecurityGroupAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new UpsertGoogleSecurityGroupAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

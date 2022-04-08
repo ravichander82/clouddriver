@@ -37,7 +37,7 @@ class ModifyGoogleServerGroupInstanceTemplateAtomicOperationConverterUnitSpec ex
   ModifyGoogleServerGroupInstanceTemplateAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new ModifyGoogleServerGroupInstanceTemplateAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new ModifyGoogleServerGroupInstanceTemplateAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

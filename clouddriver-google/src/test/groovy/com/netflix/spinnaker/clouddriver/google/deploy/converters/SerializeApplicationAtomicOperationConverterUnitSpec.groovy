@@ -37,7 +37,7 @@ class SerializeApplicationAtomicOperationConverterUnitSpec extends Specification
   SaveSnapshotAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new SaveSnapshotAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new SaveSnapshotAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

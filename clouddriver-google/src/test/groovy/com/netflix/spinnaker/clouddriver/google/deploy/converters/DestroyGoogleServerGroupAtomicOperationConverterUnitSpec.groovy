@@ -36,7 +36,7 @@ class DestroyGoogleServerGroupAtomicOperationConverterUnitSpec extends Specifica
   DestroyGoogleServerGroupAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new DestroyGoogleServerGroupAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new DestroyGoogleServerGroupAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

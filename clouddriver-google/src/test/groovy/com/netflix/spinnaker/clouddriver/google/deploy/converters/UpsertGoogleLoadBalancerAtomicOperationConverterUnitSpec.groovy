@@ -48,7 +48,7 @@ class UpsertGoogleLoadBalancerAtomicOperationConverterUnitSpec extends Specifica
   UpsertGoogleLoadBalancerAtomicOperationConverter converter
 
   def setupSpec() {
-    this.converter = new UpsertGoogleLoadBalancerAtomicOperationConverter(objectMapper: mapper)
+    this.converter = new UpsertGoogleLoadBalancerAtomicOperationConverter()
     def credentialsRepository = Mock(CredentialsRepository)
     def mockCredentials = Mock(GoogleNamedAccountCredentials)
     credentialsRepository.getOne(_) >> mockCredentials

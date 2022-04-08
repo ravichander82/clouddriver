@@ -50,11 +50,10 @@ class ResizeGoogleServerGroupAtomicOperationConverterUnitSpec extends Specificat
                    accountName: ACCOUNT_NAME]
       GoogleClusterProvider googleClusterProviderMock = Mock(GoogleClusterProvider)
       ResizeGoogleServerGroupAtomicOperationConverter converter =
-        new ResizeGoogleServerGroupAtomicOperationConverter(objectMapper: mapper,
-                                                            googleClusterProvider: googleClusterProviderMock)
+        new ResizeGoogleServerGroupAtomicOperationConverter(googleClusterProvider: googleClusterProviderMock)
       def credentialsRepository = Mock(CredentialsRepository)
       def mockCredentials = Mock(GoogleNamedAccountCredentials)
-      credentialsRepository.getCredentials(_) >> mockCredentials
+      credentialsRepository.getOne(_) >> mockCredentials
       converter.credentialsRepository = credentialsRepository
 
     when:
@@ -84,8 +83,7 @@ class ResizeGoogleServerGroupAtomicOperationConverterUnitSpec extends Specificat
       def input = [application: "app", targetSize: desired, region: REGION]
       GoogleClusterProvider googleClusterProviderMock = Mock(GoogleClusterProvider)
       ResizeGoogleServerGroupAtomicOperationConverter converter =
-        new ResizeGoogleServerGroupAtomicOperationConverter(objectMapper: mapper,
-                                                            googleClusterProvider: googleClusterProviderMock)
+        new ResizeGoogleServerGroupAtomicOperationConverter(googleClusterProvider: googleClusterProviderMock)
       def credentialsRepository = Mock(CredentialsRepository)
       def mockCredentials = Mock(GoogleNamedAccountCredentials)
       credentialsRepository.getOne(_) >> mockCredentials
