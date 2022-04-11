@@ -23,6 +23,7 @@ import com.netflix.spinnaker.cats.cache.CacheData
 import com.netflix.spinnaker.cats.cache.RelationshipCacheFilter
 import com.netflix.spinnaker.clouddriver.google.GoogleCloudProvider
 import com.netflix.spinnaker.clouddriver.google.cache.Keys
+import com.netflix.spinnaker.clouddriver.google.config.GoogleConfigurationProperties
 import com.netflix.spinnaker.clouddriver.google.deploy.GCEUtil
 import com.netflix.spinnaker.clouddriver.google.model.GoogleSecurityGroup
 import com.netflix.spinnaker.clouddriver.google.security.GoogleNamedAccountCredentials
@@ -42,14 +43,14 @@ import static com.netflix.spinnaker.clouddriver.google.cache.Keys.Namespace.SECU
 @Component
 class GoogleSecurityGroupProvider implements SecurityGroupProvider<GoogleSecurityGroup> {
 
-  private final CredentialsRepository credentialsRepository
+  private final CredentialsRepository<GoogleNamedAccountCredentials> credentialsRepository
   private final Cache cacheView
   private final ObjectMapper objectMapper
 
   final String cloudProvider = GoogleCloudProvider.ID
 
   @Autowired
-  GoogleSecurityGroupProvider(CredentialsRepository credentialsRepository, Cache cacheView, ObjectMapper objectMapper) {
+  GoogleSecurityGroupProvider(CredentialsRepository<GoogleNamedAccountCredentials> credentialsRepository, Cache cacheView, ObjectMapper objectMapper) {
     this.credentialsRepository = credentialsRepository
     this.cacheView = cacheView
     this.objectMapper = objectMapper
